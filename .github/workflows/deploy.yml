@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Build v0.2.0 from the last tested base plus the verified feature patch.
+# Build v0.2.0 and apply the Clear Blue visual refresh.
 
 on:
   push:
@@ -90,6 +90,26 @@ jobs:
           unzip -tq /tmp/FragileFit-v0.2.0-patch.zip
           unzip -oq /tmp/FragileFit-v0.2.0-patch.zip -d site
           echo "Verified v0.2.0 feature patch applied." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apply Clear Blue visual theme
+        shell: bash
+        run: |
+          cat release/v0.2.1-theme/clear-blue.css >> site/styles.css
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          for path in Path("site").glob("*.html"):
+              content = path.read_text(encoding="utf-8")
+              content = re.sub(r'(<meta\\s+name=["\\']theme-color["\\']\\s+content=["\\'])[^"\\']*(["\\'])', r'\\1#f4f8ff\\2', content, flags=re.I)
+              path.write_text(content, encoding="utf-8")
+          manifest = Path("site/manifest.webmanifest")
+          if manifest.exists():
+              content = manifest.read_text(encoding="utf-8")
+              content = re.sub(r'"(theme_color|background_color)"\\s*:\\s*"[^"]+"', lambda m: f'"{m.group(1)}": "#f4f8ff"', content)
+              manifest.write_text(content, encoding="utf-8")
+          PY
+          sed -i 's/fragilefit-shell-v2/fragilefit-shell-v3-blue/g' site/sw.js
+          echo "Clear Blue light visual theme applied." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         working-directory: site
