@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Pages source is configured to GitHub Actions.
+# Build v0.2.0 from the last tested base plus the verified feature patch.
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     paths:
       - "release/FragileFit-GitHub-source-fixed.zip"
       - "release/FragileFit-GitHub-source.zip"
+      - "release/v0.2.0-patch-parts/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -44,10 +45,22 @@ jobs:
         with:
           node-version: 22
 
-      - name: Extract source archive
+      - name: Extract tested base application
         run: |
           mkdir -p site
           unzip -q "${{ steps.archive.outputs.path }}" -d site
+
+      - name: Verify and apply v0.2.0 feature patch
+        shell: bash
+        run: |
+          if [ -f "release/v0.2.0-patch-parts/part-00.b64" ]; then
+            cat release/v0.2.0-patch-parts/part-*.b64 | base64 --decode > /tmp/FragileFit-v0.2.0-patch.zip
+            unzip -tq /tmp/FragileFit-v0.2.0-patch.zip
+            unzip -oq /tmp/FragileFit-v0.2.0-patch.zip -d site
+            echo "FragileFit v0.2.0 feature patch verified and applied." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No v0.2.0 patch present; building tested base application." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Install dependencies
         working-directory: site
