@@ -1,4 +1,5 @@
 name: Build and deploy FragileFit
+# Pages source is configured to GitHub Actions.
 
 on:
   push:
