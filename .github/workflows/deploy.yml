@@ -96,24 +96,7 @@ jobs:
       - name: Reconstruct and apply v0.3.0 product polish
         shell: bash
         run: |
-          cat \\
-            release/v0.3.0-polish/part-00.b64 \\
-            release/v0.3.0-polish/part-01.b64 \\
-            release/v0.3.0-polish/part-02.b64 \\
-            release/v0.3.0-polish/part-03.b64 \\
-            release/v0.3.0-polish/part-04.b64 \\
-            release/v0.3.0-polish/part-05.b64 \\
-            release/v0.3.0-polish/part-06.b64 \\
-            release/v0.3.0-polish/part-07.b64 \\
-            release/v0.3.0-polish/part-08.b64 \\
-            release/v0.3.0-polish/part-09.b64 \\
-            release/v0.3.0-polish/part-10.b64 \\
-            release/v0.3.0-polish/part-11.b64 \\
-            release/v0.3.0-polish/part-12.b64 \\
-            release/v0.3.0-polish/part-13.b64 \\
-            release/v0.3.0-polish/part-14.b64 \\
-            release/v0.3.0-polish/part-15.b64
-            | base64 --decode > /tmp/FragileFit-v0.3.0-polish-patch.zip
+          cat release/v0.3.0-polish/part-{00..15}.b64 | base64 --decode > /tmp/FragileFit-v0.3.0-polish-patch.zip
           unzip -tq /tmp/FragileFit-v0.3.0-polish-patch.zip
           unzip -oq /tmp/FragileFit-v0.3.0-polish-patch.zip -d site
           echo "FragileFit v0.3.0 product and experience refresh applied." >> "$GITHUB_STEP_SUMMARY"
