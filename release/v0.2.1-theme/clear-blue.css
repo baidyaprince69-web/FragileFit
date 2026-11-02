@@ -74,3 +74,40 @@ th{color:#7085a1;border-bottom-color:#dce7f5}td{border-bottom-color:#edf2f8;colo
 .legal-page{border-color:#dce7f5;background:linear-gradient(145deg,#fff,#f7faff);box-shadow:var(--shadow)}.legal-page p{color:#60758f}.legal-foot{border-top-color:#e1eaf5}.legal-foot a{color:#286dc8}
 .public-feature-grid section{border-color:#dce7f5;background:#f7faff}
 @media(max-width:680px){.mobile-nav{background:rgba(255,255,255,.98)}.mobile-more-menu{background:#fff}.guide-banner{background:linear-gradient(105deg,#eaf8ff,#eef3ff)}}
+
+/* Border refinement: clearer component separation without a heavy outline look. */
+:root{--line:#c7d6e9}
+.sidebar{border-right-width:1.5px;border-right-color:#c8d7e9}
+.topbar{border-bottom-width:1.5px;border-bottom-color:#cbd9eb}
+.mobile-nav{border-top-width:1.5px;border-top-color:#c8d7e9}
+.panel,.metric-card,.recipe-card,.insight-card,.report-card,.legal-page{
+  border-width:1.5px;border-color:#c5d5e9
+}
+.notice,.guide-banner,.calc-output,.roi-result-head,.roi-risk-control,.formula-strip{
+  border-width:1.5px;border-color:#bfd4ed
+}
+.form-grid input,.form-grid select,.form-grid textarea,
+.line-item-row input,.line-item-row select,.roi-risk-input input{
+  border-width:1.5px;border-color:#c4d4e8
+}
+.icon-button,.avatar,.btn.secondary,.dialog-close,.status,.sample-tag{
+  border-width:1.5px
+}
+.editor-dialog,.tour-dialog,.mobile-more-menu{
+  border-width:1.5px;border-color:#c3d4e9
+}
+th{border-bottom-width:1.5px;border-bottom-color:#cbd9eb}
+td{border-bottom-width:1.2px;border-bottom-color:#e1e9f3}
+.form-section{border-top-width:1.5px;border-top-color:#d2dfef}
+.dialog-head{border-bottom-width:1.5px;border-bottom-color:#d0deef}
+.dialog-actions{border-top-width:1.5px;border-top-color:#d0deef}
+.profit-breakdown{border-top-width:1.5px;border-top-color:#d5e1ef}
+.app-footer,.sidebar-bottom,.chart-legend,.recipe-dims,.calc-footnote{
+  border-color:#d2dfef
+}
+.nav-item.active{box-shadow:inset 3px 0 #287edc,0 0 0 1px rgba(53,111,228,.09)}
+.metric-card:hover,.recipe-card:hover{border-color:#a9c7eb}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus,
+.line-item-row input:focus,.line-item-row select:focus{
+  border-color:#6a9fdc
+}
