@@ -8,6 +8,7 @@ on:
       - "release/FragileFit-GitHub-source-fixed.zip"
       - "release/FragileFit-GitHub-source.zip"
       - "release/v0.2.0-patch-parts/**"
+      - "release/v0.2.1-theme/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
