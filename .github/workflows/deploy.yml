@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - "release/FragileFit-GitHub-source-fixed.zip"
       - "release/FragileFit-GitHub-source.zip"
-      - "patches/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -25,57 +25,45 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Check source archive
+      - name: Select source archive
         id: archive
         shell: bash
         run: |
-          if [ -f "release/FragileFit-GitHub-source.zip" ]; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
+          if [ -f "release/FragileFit-GitHub-source-fixed.zip" ]; then
+            echo "path=release/FragileFit-GitHub-source-fixed.zip" >> "$GITHUB_OUTPUT"
+          elif [ -f "release/FragileFit-GitHub-source.zip" ]; then
+            echo "path=release/FragileFit-GitHub-source.zip" >> "$GITHUB_OUTPUT"
           else
-            echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "Source archive not uploaded yet. Add release/FragileFit-GitHub-source.zip to publish FragileFit." >> "$GITHUB_STEP_SUMMARY"
+            echo "No FragileFit source ZIP found in release/." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
           fi
 
       - name: Set up Node.js
-        if: steps.archive.outputs.present == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Extract source archive
-        if: steps.archive.outputs.present == 'true'
         run: |
           mkdir -p site
-          unzip -q release/FragileFit-GitHub-source.zip -d site
-
-      - name: Apply TypeScript Web Crypto compatibility fix
-        if: steps.archive.outputs.present == 'true'
-        run: |
-          if [ -f "patches/security.ts" ]; then
-            cp patches/security.ts site/src/security.ts
-          fi
+          unzip -q "${{ steps.archive.outputs.path }}" -d site
 
       - name: Install dependencies
-        if: steps.archive.outputs.present == 'true'
         working-directory: site
         run: npm install --no-audit --no-fund
 
       - name: Build and test
-        if: steps.archive.outputs.present == 'true'
         working-directory: site
         run: npm test
 
       - name: Configure GitHub Pages
-        if: steps.archive.outputs.present == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        if: steps.archive.outputs.present == 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: site
 
       - name: Deploy to GitHub Pages
-        if: steps.archive.outputs.present == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
