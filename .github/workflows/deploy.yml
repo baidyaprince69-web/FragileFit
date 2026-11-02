@@ -50,17 +50,46 @@ jobs:
           mkdir -p site
           unzip -q "${{ steps.archive.outputs.path }}" -d site
 
-      - name: Verify and apply v0.2.0 feature patch
+      - name: Reconstruct, verify and apply v0.2.0 feature patch
         shell: bash
         run: |
-          if [ -f "release/v0.2.0-patch-parts/part-00.b64" ]; then
-            cat release/v0.2.0-patch-parts/part-*.b64 | base64 --decode > /tmp/FragileFit-v0.2.0-patch.zip
-            unzip -tq /tmp/FragileFit-v0.2.0-patch.zip
-            unzip -oq /tmp/FragileFit-v0.2.0-patch.zip -d site
-            echo "FragileFit v0.2.0 feature patch verified and applied." >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "No v0.2.0 patch present; building tested base application." >> "$GITHUB_STEP_SUMMARY"
-          fi
+          cat \
+            release/v0.2.0-patch-parts/part-00.b64 \
+            release/v0.2.0-patch-parts/part-01.b64 \
+            release/v0.2.0-patch-parts/part-02.b64 \
+            release/v0.2.0-patch-parts/part-03.b64 \
+            release/v0.2.0-patch-parts/part-04fix-00.b64 \
+            release/v0.2.0-patch-parts/part-04fix-01.b64 \
+            release/v0.2.0-patch-parts/part-04fix-02.b64 \
+            release/v0.2.0-patch-parts/part-04fix-03.b64 \
+            release/v0.2.0-patch-parts/part-04fix-04.b64 \
+            release/v0.2.0-patch-parts/part-04fix-05.b64 \
+            release/v0.2.0-patch-parts/part-04fix-06.b64 \
+            release/v0.2.0-patch-parts/part-04fix-07.b64 \
+            release/v0.2.0-patch-parts/part-04fix08-00.b64 \
+            release/v0.2.0-patch-parts/part-04fix08-01.b64 \
+            release/v0.2.0-patch-parts/part-04fix08-02.b64 \
+            release/v0.2.0-patch-parts/part-04fix08-03.b64 \
+            release/v0.2.0-patch-parts/part-04fix-09.b64 \
+            release/v0.2.0-patch-parts/part-05.b64 \
+            release/v0.2.0-patch-parts/part-06.b64 \
+            release/v0.2.0-patch-parts/part-07.b64 \
+            release/v0.2.0-patch-parts/part-08a.b64 \
+            release/v0.2.0-patch-parts/part-08b.b64 \
+            release/v0.2.0-patch-parts/part-08c.b64 \
+            release/v0.2.0-patch-parts/part-08fix-00.b64 \
+            release/v0.2.0-patch-parts/part-08fix-01.b64 \
+            release/v0.2.0-patch-parts/part-08fix-02a.b64 \
+            release/v0.2.0-patch-parts/part-08fix-02b.b64 \
+            release/v0.2.0-patch-parts/part-08fix-03.b64 \
+            release/v0.2.0-patch-parts/part-08fix-04.b64 \
+            release/v0.2.0-patch-parts/part-08fix-05.b64 \
+            release/v0.2.0-patch-parts/part-09.b64 \
+            release/v0.2.0-patch-parts/part-10.b64 \
+            | base64 --decode > /tmp/FragileFit-v0.2.0-patch.zip
+          unzip -tq /tmp/FragileFit-v0.2.0-patch.zip
+          unzip -oq /tmp/FragileFit-v0.2.0-patch.zip -d site
+          echo "Verified v0.2.0 feature patch applied." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         working-directory: site
