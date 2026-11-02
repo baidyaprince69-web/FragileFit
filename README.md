@@ -17,16 +17,16 @@ FragileFit helps terracotta, ceramics, glassware and handmade-product sellers un
 
 The repository deployment workflow expects the source archive at:
 
-`release/FragileFit-GitHub-source.zip`
+`release/FragileFit-GitHub-source-fixed.zip`
 
-Download **FragileFit-GitHub-source.zip** from the project handoff in ChatGPT, then upload it to this exact path:
+Download **FragileFit-GitHub-source-fixed.zip** from the project handoff in ChatGPT, then upload it to this exact path:
 
 1. Open this repository on GitHub.
 2. Select **Add file → Upload files**.
 3. Upload the ZIP inside a folder named `release` and ensure the final path is `release/FragileFit-GitHub-source.zip`.
 4. Commit the upload to `main`.
 
-The GitHub Actions workflow will then:
+The GitHub Actions workflow prioritizes the corrected archive and will then:
 - Extract the source archive into a clean build directory.
 - Install the TypeScript development dependency.
 - Run `npm test` (TypeScript build plus critical calculation and encryption tests).
