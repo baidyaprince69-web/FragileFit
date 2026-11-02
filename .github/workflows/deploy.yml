@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "release/FragileFit-GitHub-source.zip"
+      - "patches/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -40,12 +41,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: release/package.json
 
       - name: Extract source archive
         if: steps.archive.outputs.present == 'true'
         run: |
           mkdir -p site
           unzip -q release/FragileFit-GitHub-source.zip -d site
+
+      - name: Apply TypeScript Web Crypto compatibility fix
+        if: steps.archive.outputs.present == 'true'
+        run: |
+          if [ -f "patches/security.ts" ]; then
+            cp patches/security.ts site/src/security.ts
+          fi
 
       - name: Install dependencies
         if: steps.archive.outputs.present == 'true'
