@@ -95,19 +95,8 @@ jobs:
         shell: bash
         run: |
           cat release/v0.2.1-theme/clear-blue.css >> site/styles.css
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          for path in Path("site").glob("*.html"):
-              content = path.read_text(encoding="utf-8")
-              content = re.sub(r'(<meta\\s+name=["\\']theme-color["\\']\\s+content=["\\'])[^"\\']*(["\\'])', r'\\1#f4f8ff\\2', content, flags=re.I)
-              path.write_text(content, encoding="utf-8")
-          manifest = Path("site/manifest.webmanifest")
-          if manifest.exists():
-              content = manifest.read_text(encoding="utf-8")
-              content = re.sub(r'"(theme_color|background_color)"\\s*:\\s*"[^"]+"', lambda m: f'"{m.group(1)}": "#f4f8ff"', content)
-              manifest.write_text(content, encoding="utf-8")
-          PY
+          sed -i 's/<meta name="theme-color" content="[^"]*"/<meta name="theme-color" content="#f4f8ff"/g' site/*.html
+          sed -i -E 's/("(theme_color|background_color)"[[:space:]]*:[[:space:]]*)"[^"]+"/\\1"#f4f8ff"/g' site/manifest.webmanifest
           sed -i 's/fragilefit-shell-v2/fragilefit-shell-v3-blue/g' site/sw.js
           echo "Clear Blue light visual theme applied." >> "$GITHUB_STEP_SUMMARY"
 
