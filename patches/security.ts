@@ -29,7 +29,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
 }
 
 export async function encryptBackupText(plaintext: string, password: string): Promise<string> {
-  if (password.length < 10) throw new Error('Use a backup password of at least 10 characters.');
+  if (password.length < 8) throw new Error('Use a backup password of at least 8 characters.');
   if (!globalThis.crypto?.subtle) throw new Error('Web Crypto is unavailable. Use HTTPS or localhost.');
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -69,6 +69,17 @@ export async function runCryptoTests(): Promise<Array<{ name: string; passed: bo
     const encrypted = await encryptBackupText(original, 'fragilefit-test-password');
     const decrypted = await decryptBackupText(encrypted, 'fragilefit-test-password');
     if (decrypted !== original) throw new Error('Decrypted content did not match original content.');
+  });
+  await test('AES-GCM accepts an eight-character backup password', async () => {
+    const encrypted = await encryptBackupText('minimum-length-test', '12345678');
+    const decrypted = await decryptBackupText(encrypted, '12345678');
+    if (decrypted !== 'minimum-length-test') throw new Error('Eight-character password did not round-trip.');
+  });
+  await test('AES-GCM rejects a seven-character backup password', async () => {
+    let rejected = false;
+    try { await encryptBackupText('must-not-encrypt', '1234567'); }
+    catch (error) { rejected = error instanceof Error && /at least 8 characters/.test(error.message); }
+    if (!rejected) throw new Error('A seven-character password was not rejected with the minimum-length message.');
   });
   await test('AES-GCM rejects an incorrect backup password', async () => {
     const encrypted = await encryptBackupText('integrity-check', 'fragilefit-test-password');
