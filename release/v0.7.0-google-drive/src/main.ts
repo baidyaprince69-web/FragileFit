@@ -668,6 +668,51 @@ function showDriveRestoreDialog(backup: DriveBackupMetadata): void {
   );
 }
 
+function showFirstRunDataStorageNotice(): void {
+  const acknowledgementKey = 'fragilefit-data-storage-notice-v1';
+  try {
+    if (localStorage.getItem(acknowledgementKey) === 'acknowledged') return;
+  } catch {
+    // If browser storage is unavailable, show the warning rather than skipping it.
+  }
+
+  const dialog = document.createElement('dialog');
+  dialog.id = 'data-storage-notice';
+  dialog.className = 'data-storage-notice';
+  dialog.setAttribute('aria-labelledby', 'data-storage-notice-title');
+  dialog.innerHTML = `
+    <div class="data-storage-notice-head">
+      <span class="eyebrow">IMPORTANT · BEFORE YOU START</span>
+      <span class="data-storage-notice-mark" aria-hidden="true">!</span>
+    </div>
+    <h2 id="data-storage-notice-title">Protect your FragileFit records.</h2>
+    <p class="data-storage-notice-lead">Your products, packaging recipes, orders and shipments are saved in this browser on this device. They are not automatically stored in a FragileFit online account.</p>
+    <ul>
+      <li>Clearing this site's browser or site data can delete your records.</li>
+      <li>A browser may remove stored data automatically in some circumstances, such as when it needs storage space.</li>
+      <li>Resetting a browser profile, changing devices or losing this device can make the records unavailable.</li>
+    </ul>
+    <div class="data-storage-notice-tip"><strong>Before entering important business information</strong><span>Create an encrypted backup or export a copy regularly. Persistent storage protection may reduce automatic cleanup on supported browsers, but it cannot prevent manual deletion or device loss.</span></div>
+    <div class="data-storage-notice-actions">
+      <button type="button" class="btn secondary" data-storage-notice-review>Review Data Safety</button>
+      <button type="button" class="btn primary" data-storage-notice-ack>I understand — continue</button>
+    </div>`;
+  const acknowledge = (): void => {
+    try { localStorage.setItem(acknowledgementKey, 'acknowledged'); } catch { /* The notice will be shown again if it cannot be remembered. */ }
+    dialog.close();
+  };
+  dialog.querySelector<HTMLButtonElement>('[data-storage-notice-ack]')!.addEventListener('click', acknowledge);
+  dialog.querySelector<HTMLButtonElement>('[data-storage-notice-review]')!.addEventListener('click', () => {
+    acknowledge();
+    activeView = 'data-safety';
+    render();
+  });
+  dialog.addEventListener('cancel', event => event.preventDefault());
+  dialog.addEventListener('close', () => dialog.remove(), { once: true });
+  document.body.append(dialog);
+  dialog.showModal();
+}
+
 function showDriveSetupDetails(): void {
   const driveStatus = getGoogleDrivePreparationStatus();
   const configurationMessage = driveStatus.configured
@@ -823,6 +868,7 @@ async function start(): Promise<void> {
     const allowedViews = ['dashboard', 'products', 'packaging', 'roi', 'orders', 'shipments', 'intelligence', 'reports', 'settings', 'data-safety'];
     if (requestedView && allowedViews.includes(requestedView)) activeView = requestedView;
     render();
+    if (params.get('tour') !== '1') showFirstRunDataStorageNotice();
     void preloadGoogleIdentityServices().then(() => { if (activeView === 'data-safety') render(); }).catch(error => { console.warn('Google authorization is not ready:', error); if (activeView === 'data-safety') render(); });
     if(params.get('tour')==='1') window.setTimeout(()=>startGuidedTour(),250);
     if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
