@@ -306,7 +306,7 @@ function renderDataSafety(): string {
         ? 'Ready to connect'
         : 'Authorization library loading';
   const driveControls = !driveStatus.configured
-    ? '<div class="notice drive-notice"><span class="notice-icon">i</span><div><strong>One setup item remains.</strong><p>The public Google OAuth client ID must be configured in the FragileFit source before Google sign-in can be enabled. No access token or client secret belongs in the repository.</p></div></div>'
+    ? '<div class="notice drive-notice"><span class="notice-icon">i</span><div><strong>One setup item remains.</strong><p>The public Google OAuth client ID must be configured in the FragileFit source before Google sign-in can be enabled. No access token or client secret belongs in the repository.</p></div></div>' + button('View setup requirements','drive-setup-details','secondary')
     : !driveStatus.libraryReady
       ? '<p class="muted small">Loading Google authorization. Check your internet connection, then reload this page if the status does not change.</p>'
       : driveStatus.connected
