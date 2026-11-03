@@ -190,7 +190,7 @@ jobs:
           cp release/v0.7.0-google-drive/package.json site/package.json
           cp release/v0.7.0-google-drive/tests/run-tests.mjs site/tests/run-tests.mjs
           cp release/v0.7.0-google-drive/tests/drive-tests.mjs site/tests/drive-tests.mjs
-          cp release/v0.6.0-data-safety/tests/data-safety-tests.mjs site/tests/data-safety-tests.mjs
+          cp release/v0.7.0-google-drive/tests/data-safety-tests.mjs site/tests/data-safety-tests.mjs
           cat release/v0.7.0-google-drive/styles.css >> site/styles.css
           sed -i 's/fragilefit-shell-v5-safety-warnings/fragilefit-shell-v6-google-drive/g' site/sw.js
           echo "FragileFit v0.7.0 encrypted Google Drive backup and restore installed." >> "$GITHUB_STEP_SUMMARY"
