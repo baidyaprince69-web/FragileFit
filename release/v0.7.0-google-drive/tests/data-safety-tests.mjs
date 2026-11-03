@@ -15,7 +15,7 @@ await test('First-time visitors must acknowledge the local data-loss warning', a
   assert.match(mainSource, /Clearing this site's browser or site data can delete your records/);
   assert.match(mainSource, /A browser may remove stored data automatically/);
   assert.match(mainSource, /Create an encrypted backup or export a copy regularly/);
-  assert.match(mainSource, /showFirstRunDataStorageNotice\(\\)/);
+  assert.ok(mainSource.includes('showFirstRunDataStorageNotice();'));
   assert.match(mainSource, /data-storage-notice-review/);
   assert.match(mainSource, /data-storage-notice-ack/);
 });
