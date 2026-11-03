@@ -88,7 +88,7 @@ function appShell(): string {
       <div class="sidebar-bottom">
         <div class="local-note"><span class="live-dot"></span><span>LOCAL WORKSPACE</span></div>
         <div class="sidebar-foot">Your records stay in this browser.</div>
-        <a class="version-link" href="#reports" data-view="reports">FragileFit · v0.3.0</a>
+        <a class="version-link" href="#reports" data-view="reports">FragileFit · v0.5.0</a>
       </div>
     </aside>
     <div class="main-column">
