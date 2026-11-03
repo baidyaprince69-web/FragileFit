@@ -4,8 +4,9 @@ import { runVisitorTests } from './visitor-tests.mjs';
 import { runStorageTests } from './storage-tests.mjs';
 import { runDataSafetyTests } from './data-safety-tests.mjs';
 import { runDriveTests } from './drive-tests.mjs';
+import { runLegalPageTests } from './legal-pages-tests.mjs';
 
-const results = [...runCriticalTests(), ...await runCryptoTests(), ...runVisitorTests(), ...await runStorageTests(), ...runDataSafetyTests(), ...await runDriveTests()];
+const results = [...runCriticalTests(), ...await runCryptoTests(), ...runVisitorTests(), ...await runStorageTests(), ...runDataSafetyTests(), ...await runDriveTests(), ...runLegalPageTests()];
 for (const result of results) {
   process.stdout.write(`${result.passed ? 'PASS' : 'FAIL'}  ${result.name}${result.passed ? '' : ` — ${result.detail}`}\n`);
 }
