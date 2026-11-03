@@ -39,4 +39,14 @@ await test('Google Drive remains disconnected until explicit OAuth configuration
   assert.equal(GOOGLE_DRIVE_BACKUP_SCOPE, 'https://www.googleapis.com/auth/drive.file');
   assert.match(mainSource, /No Google account has been connected/);
 });
+
+await test('Data Safety deep links select the requested view before rendering', async () => {
+  const selected = mainSource.indexOf("if (requestedView && allowedViews.includes(requestedView)) activeView = requestedView;");
+  const rendered = mainSource.indexOf("render();", selected);
+  assert.ok(selected >= 0 && rendered > selected, 'The selected route must be rendered after reading the view query parameter.');
+});
+await test('App explains that browser-owned data clearing cannot be intercepted', async () => {
+  assert.match(mainSource, /cannot intercept the browser's own Clear browsing data controls/);
+});
+
 export function runDataSafetyTests() { return results; }
