@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Build FragileFit v0.3.1: v0.3.0 product release plus tested first-visit clarity improvements.
+# Build FragileFit v0.4.0: v0.3.1 plus an isolated, task-based first-visit practice.
 
 on:
   push:
@@ -11,6 +11,8 @@ on:
       - "release/v0.2.1-theme/**"
       - "release/v0.3.0-polish/**"
       - "release/v0.3.1-visitor-clarity/part-*.b64"
+      - "release/v0.4.0-practice/practice.html"
+      - "release/v0.4.0-practice/inject-practice-links.mjs"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -20,7 +22,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages-v031
+  group: github-pages-v040
   cancel-in-progress: true
 
 jobs:
@@ -109,6 +111,18 @@ jobs:
           unzip -tq /tmp/FragileFit-v0.3.1-visitor-clarity.zip
           unzip -oq /tmp/FragileFit-v0.3.1-visitor-clarity.zip -d site
           echo "FragileFit v0.3.1 visitor-clarity update applied." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Add isolated guided practice and entry links
+        shell: bash
+        run: |
+          test -f release/v0.4.0-practice/practice.html
+          test -f release/v0.4.0-practice/inject-practice-links.mjs
+          cp release/v0.4.0-practice/practice.html site/practice.html
+          node release/v0.4.0-practice/inject-practice-links.mjs site
+          test -s site/practice.html
+          grep -q "Start guided practice" site/index.html
+          grep -q "Start guided practice" site/app.html
+          echo "FragileFit v0.4.0 guided practice installed and linked." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Apply Clear Blue visual theme
         shell: bash
