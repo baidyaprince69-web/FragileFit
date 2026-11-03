@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f8ff">
+  <meta name="description" content="FragileFit privacy policy explaining local browser storage, encrypted backups and optional Google Drive access.">
+  <meta name="robots" content="index,follow">
+  <title>Privacy Policy · FragileFit</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./icons/favicon.svg">
+</head>
+<body>
+  <main class="legal-page">
+    <a class="brand" href="./index.html" aria-label="FragileFit home">
+      <span class="brand-symbol"><span></span><span></span><span></span></span>
+      <span><strong>FragileFit</strong><small>PACKAGING INTELLIGENCE</small></span>
+    </a>
+    <div class="eyebrow">PRIVACY POLICY</div>
+    <h1>Your records, your device, your backup choice.</h1>
+    <p><strong>Last updated: 3 November 2026.</strong></p>
+    <p>This policy explains how the current FragileFit web application handles information. FragileFit is an early, local-first business recordkeeping and packaging-cost tool. The current release does not provide individual FragileFit accounts or a FragileFit-operated cloud database.</p>
+
+    <h2>1. Information stored in your browser</h2>
+    <p>Products, packaging recipes, orders, shipments, courier settings and workspace preferences are stored in IndexedDB in the browser profile on the device where you use FragileFit. The project does not receive these workspace records through an application backend.</p>
+    <p>Anyone who can use your unlocked browser profile may be able to open the same local FragileFit workspace. Use a device and browser profile you control, lock your device, and sign out of shared operating-system accounts when appropriate. Different devices and browser profiles have separate local workspaces.</p>
+
+    <h2>2. Optional Google Drive backup</h2>
+    <p>You may choose to connect a Google account and manually create a backup. Google handles the sign-in and authorization process. FragileFit requests the <code>https://www.googleapis.com/auth/drive.file</code> permission, which is limited to specific Drive files used with the app rather than unrestricted access to your entire Drive.</p>
+    <p>When you choose <strong>Back up now</strong>, FragileFit encrypts the workspace in your browser before uploading the encrypted backup file to the Google Drive account you authorized. The app creates and uses a folder named <strong>FragileFit Backups</strong>, lists backup files in that folder and can download a selected file for restoration. The current interface does not provide a backup-file deletion feature.</p>
+    <p>The backup uses PBKDF2-SHA-256 to derive an encryption key and AES-256-GCM for authenticated encryption. The backup password is not sent to Google as a password and is not stored by FragileFit. The Google access token is held in browser memory for the current session and is not intentionally saved in localStorage or IndexedDB. You may need to reconnect after reloading the page or when the token expires.</p>
+    <p>Google stores the encrypted backup in the Google Drive account you selected. Google may process account, authorization, file metadata and uploaded encrypted-file information under Google's own terms and privacy policy. Your Drive storage quota applies. FragileFit does not automatically synchronize workspaces or upload backups on a schedule.</p>
+
+    <h2>3. Backup passwords and recovery</h2>
+    <p>Encrypted backups currently accept passwords of at least 8 characters. Choose a unique password and keep it separately from your device and backup file. FragileFit does not know or recover the password. If you lose it, the encrypted backup may be impossible to restore.</p>
+    <p>Plain JSON exports are not encrypted. Anyone who obtains one may be able to read its contents. Store plain exports carefully and delete copies you no longer need.</p>
+
+    <h2>4. Hosting, network requests and third parties</h2>
+    <p>The website is delivered through GitHub Pages. The app loads Google's Identity Services library when Google Drive authorization is prepared and communicates with Google Drive only when you use the optional Drive features. Those providers handle their services under their own policies. FragileFit does not operate a server-side customer account system in this release.</p>
+
+    <h2>5. Retention and deletion</h2>
+    <p>Local records remain in the browser until you delete them, clear the site's browser storage, reset the browser profile or lose access to the device. Deleting local records does not delete backups already stored in your Google Drive. Manage those files in your own Drive account. You can also review or revoke the app's Google account connection in your Google Account security and connections settings.</p>
+    <p>Restoring a backup replaces the current local workspace on that device; it does not merge records. Check the selected backup and the replacement warning before confirming a restore.</p>
+
+    <h2>6. Security limits</h2>
+    <p>FragileFit uses browser storage and browser-side encryption for optional backup files, but no web application or storage method can be guaranteed completely secure. Keep your browser and device updated, protect access to your browser profile, use a unique backup password, and keep more than one safe copy of important records.</p>
+
+    <h2>7. Changes to this policy</h2>
+    <p>This policy may be updated when the app's features or data handling change. The date at the top indicates the latest revision. Material changes should be reviewed before continuing to use optional connected services.</p>
+
+    <h2>8. Contact and support</h2>
+    <p>For general product support, use the <a href="https://github.com/baidyaprince69-web/FragileFit/issues" target="_blank" rel="noopener noreferrer">FragileFit GitHub issue tracker</a>. Do not post passwords, backup files, access tokens, private business records or other sensitive information in a public issue.</p>
+
+    <p class="legal-foot"><a href="./index.html">Website</a> · <a href="./app.html">Open workspace</a> · <a href="./terms.html">Terms of Use</a></p>
+  </main>
+</body>
+</html>
