@@ -518,8 +518,8 @@ function exportCsvFiles(): void {
 }
 
 function showBackupDialog(): void {
-  openDialog('Create encrypted backup',`<div class="form-grid">${formSection('Backup password','Use at least 10 characters. This password is not stored by FragileFit.')}${field('Password','backupPassword','','password','minlength="10" required autocomplete="new-password"')}${field('Confirm password','confirmPassword','','password','minlength="10" required autocomplete="new-password"')}<p class="muted small full-span">Encryption uses PBKDF2-SHA-256 with a random salt and AES-256-GCM with a random IV. If you lose this password, the encrypted backup cannot be restored.</p></div>`,async(form,dialog)=>{
-    const password=value(form,'backupPassword');if(password.length<10)throw new Error('Use at least 10 characters.');if(password!==value(form,'confirmPassword'))throw new Error('The passwords do not match.');await exportEncryptedBackup(password);dialog.close();notify('Encrypted backup created.');
+  openDialog('Create encrypted backup',`<div class="form-grid">${formSection('Backup password','Use at least 8 characters. This password is not stored by FragileFit.')}${field('Password','backupPassword','','password','minlength="8" required autocomplete="new-password"')}${field('Confirm password','confirmPassword','','password','minlength="8" required autocomplete="new-password"')}<p class="muted small full-span">Encryption uses PBKDF2-SHA-256 with a random salt and AES-256-GCM with a random IV. If you lose this password, the encrypted backup cannot be restored.</p></div>`,async(form,dialog)=>{
+    const password=value(form,'backupPassword');if(password.length<8)throw new Error('Use at least 8 characters.');if(password!==value(form,'confirmPassword'))throw new Error('The passwords do not match.');await exportEncryptedBackup(password);dialog.close();notify('Encrypted backup created.');
   });
 }
 
@@ -617,14 +617,14 @@ function confirmDataChange(
 function showDriveBackupDialog(): void {
   openDialog('Create encrypted Google Drive backup',
     `<div class="form-grid">
-      ${formSection('Choose a backup password','Use the same password when restoring on another device. FragileFit does not save or recover it.')}
-      ${field('Backup password','drivePassword','','password','minlength="10" required autocomplete="new-password"')}
-      ${field('Confirm password','drivePasswordConfirm','','password','minlength="10" required autocomplete="new-password"')}
+      ${formSection('Choose a backup password','Use at least 8 characters. Enter the same password when restoring. FragileFit does not save or recover it.')}
+      ${field('Backup password','drivePassword','','password','minlength="8" required autocomplete="new-password"')}
+      ${field('Confirm password','drivePasswordConfirm','','password','minlength="8" required autocomplete="new-password"')}
       <p class="muted small full-span">Your workspace is encrypted in this browser using PBKDF2-SHA-256 and AES-256-GCM before any file is uploaded.</p>
     </div>`,
     async (form, dialog) => {
       const password = value(form,'drivePassword');
-      if (password.length < 10) throw new Error('Use at least 10 characters for the backup password.');
+      if (password.length < 8) throw new Error('Use at least 8 characters for the backup password.');
       if (password !== value(form,'drivePasswordConfirm')) throw new Error('The passwords do not match.');
       const uploaded = await uploadEncryptedDriveBackup(data, password);
       dialog.close();
