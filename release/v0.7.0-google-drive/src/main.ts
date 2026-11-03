@@ -653,10 +653,10 @@ function showDriveRestoreDialog(backup: DriveBackupMetadata): void {
       await replaceAllData(restoredData);
       dialog.close();
       data = await getAllData();
-      googleDriveBackups = await listEncryptedDriveBackups();
       activeView = 'dashboard';
       render();
       notify('Google Drive backup restored to this device.');
+      try { googleDriveBackups = await listEncryptedDriveBackups(); } catch { /* The restore already succeeded; backup-list refresh can be retried later. */ }
     },
     'Restore this workspace'
   );
