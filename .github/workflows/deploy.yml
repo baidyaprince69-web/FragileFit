@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Build FragileFit v0.5.0: local storage protection and atomic restore safeguards.
+# Build FragileFit v0.6.0: destructive-action warnings, Data Safety screen and Drive preparation.
 
 on:
   push:
@@ -14,6 +14,7 @@ on:
       - "release/v0.4.0-practice/practice.html"
       - "release/v0.4.0-practice/inject-practice-links.mjs"
       - "release/v0.5.0-data-safety/**"
+      - "release/v0.6.0-data-safety/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -152,6 +153,24 @@ jobs:
           sed -i 's/fragilefit-shell-v2/fragilefit-shell-v3-blue/g' site/sw.js
           sed -i 's/fragilefit-shell-v3-blue/fragilefit-shell-v4-data-safety/g' site/sw.js
           echo "Clear Blue light visual theme applied." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apply v0.6.0 data safety experience and Google Drive preparation
+        shell: bash
+        run: |
+          test -s release/v0.6.0-data-safety/src/main.ts
+          test -s release/v0.6.0-data-safety/src/drive.ts
+          test -s release/v0.6.0-data-safety/styles.css
+          test -s release/v0.6.0-data-safety/package.json
+          test -s release/v0.6.0-data-safety/tests/run-tests.mjs
+          test -s release/v0.6.0-data-safety/tests/data-safety-tests.mjs
+          cp release/v0.6.0-data-safety/src/main.ts site/src/main.ts
+          cp release/v0.6.0-data-safety/src/drive.ts site/src/drive.ts
+          cp release/v0.6.0-data-safety/package.json site/package.json
+          cp release/v0.6.0-data-safety/tests/run-tests.mjs site/tests/run-tests.mjs
+          cp release/v0.6.0-data-safety/tests/data-safety-tests.mjs site/tests/data-safety-tests.mjs
+          cat release/v0.6.0-data-safety/styles.css >> site/styles.css
+          sed -i 's/fragilefit-shell-v4-data-safety/fragilefit-shell-v5-safety-warnings/g' site/sw.js
+          echo "FragileFit v0.6.0 data safety warnings, guarded delete flows and Drive preparation installed." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         working-directory: site
