@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Build FragileFit v0.4.0: v0.3.1 plus an isolated, task-based first-visit practice.
+# Build FragileFit v0.5.0: local storage protection and atomic restore safeguards.
 
 on:
   push:
@@ -13,6 +13,7 @@ on:
       - "release/v0.3.1-visitor-clarity/part-*.b64"
       - "release/v0.4.0-practice/practice.html"
       - "release/v0.4.0-practice/inject-practice-links.mjs"
+      - "release/v0.5.0-data-safety/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -22,7 +23,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages-v040
+  group: github-pages-v050
   cancel-in-progress: true
 
 jobs:
@@ -127,6 +128,21 @@ jobs:
           grep -q "Start guided practice" site/app.html
           echo "FragileFit v0.4.0 guided practice installed and linked." >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Apply local data safety updates and tests
+        shell: bash
+        run: |
+          test -s release/v0.5.0-data-safety/src/db.ts
+          test -s release/v0.5.0-data-safety/src/main.ts
+          test -s release/v0.5.0-data-safety/package.json
+          test -s release/v0.5.0-data-safety/tests/run-tests.mjs
+          test -s release/v0.5.0-data-safety/tests/storage-tests.mjs
+          cp release/v0.5.0-data-safety/src/db.ts site/src/db.ts
+          cp release/v0.5.0-data-safety/src/main.ts site/src/main.ts
+          cp release/v0.5.0-data-safety/package.json site/package.json
+          cp release/v0.5.0-data-safety/tests/run-tests.mjs site/tests/run-tests.mjs
+          cp release/v0.5.0-data-safety/tests/storage-tests.mjs site/tests/storage-tests.mjs
+          echo "Local storage protection and atomic restore source installed." >> "$GITHUB_STEP_SUMMARY"
+
       - name: Apply Clear Blue visual theme
         shell: bash
         run: |
@@ -134,6 +150,7 @@ jobs:
           sed -i 's/<meta name="theme-color" content="[^"]*"/<meta name="theme-color" content="#f4f8ff"/g' site/*.html
           sed -i -E 's/("(theme_color|background_color)"[[:space:]]*:[[:space:]]*)"[^"]+"/\1"#f4f8ff"/g' site/manifest.webmanifest
           sed -i 's/fragilefit-shell-v2/fragilefit-shell-v3-blue/g' site/sw.js
+          sed -i 's/fragilefit-shell-v3-blue/fragilefit-shell-v4-data-safety/g' site/sw.js
           echo "Clear Blue light visual theme applied." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
