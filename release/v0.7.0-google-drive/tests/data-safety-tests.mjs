@@ -14,6 +14,15 @@ await test('Workspace displays an always-visible local data warning', async () =
   assert.match(mainSource, /Another device has a separate workspace/);
   assert.match(mainSource, /data-view="data-safety"/);
 });
+await test('Settings provides a direct, visible route to Data Safety and backups', async () => {
+  const settingsStart = mainSource.indexOf('function renderSettings()');
+  const safetyStart = mainSource.indexOf('function renderDataSafety()', settingsStart);
+  assert.ok(settingsStart >= 0 && safetyStart > settingsStart, 'Settings and Data Safety renderers must exist.');
+  const settingsSource = mainSource.slice(settingsStart, safetyStart);
+  assert.match(settingsSource, /data-settings-safety-link/);
+  assert.match(settingsSource, /data-view="data-safety"/);
+  assert.match(settingsSource, /Open Data Safety &amp; Backups/);
+});
 await test('Dedicated Data Safety screen explains device loss and browser deletion', async () => {
   assert.match(mainSource, /What can make records unavailable/);
   assert.match(mainSource, /Losing, damaging or replacing the device/);
