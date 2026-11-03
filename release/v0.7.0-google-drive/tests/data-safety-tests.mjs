@@ -31,6 +31,14 @@ await test('Backup restore warns that it replaces rather than merges the workspa
   assert.match(mainSource, /Restoring replaces the current local workspace; it does not merge/);
   assert.match(mainSource, /confirmReplace/);
 });
+await test('Local and Google Drive encrypted backup dialogs accept passwords of eight or more characters', async () => {
+  const minimumFields = mainSource.match(/minlength="8" required autocomplete="new-password"/g) ?? [];
+  assert.equal(minimumFields.length, 4, 'Both password and confirmation fields must use an eight-character minimum.');
+  assert.match(mainSource, /password\.length<8/);
+  assert.match(mainSource, /password\.length < 8/);
+  assert.match(mainSource, /Use at least 8 characters/);
+  assert.doesNotMatch(mainSource, /minlength="10"|password\.length\s*<\s*10|at least 10 characters/);
+});
 await test('Google Drive OAuth client is configured but remains disconnected until user authorization', async () => {
   const status = getGoogleDrivePreparationStatus();
   assert.equal(status.configured, true);
