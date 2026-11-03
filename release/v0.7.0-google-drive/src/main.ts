@@ -663,14 +663,18 @@ function showDriveRestoreDialog(backup: DriveBackupMetadata): void {
 }
 
 function showDriveSetupDetails(): void {
+  const driveStatus = getGoogleDrivePreparationStatus();
+  const configurationMessage = driveStatus.configured
+    ? 'The public Google OAuth client ID is already configured in this release. Google Drive sign-in becomes available after the Google Cloud project and consent settings are complete.'
+    : 'The public Google OAuth client ID must be added to the FragileFit source before Google sign-in can be enabled.';
   openDialog('Google Drive connection requirements',
     `<div class="form-grid">
-      ${formSection('What is planned','Google Drive backup and restore are implemented as optional manual actions in this release. Sign-in becomes available after the site owner configures the public OAuth client ID.')}
-      <p class="full-span">The app owner must configure a Google Cloud project, enable the Google Drive API, register the FragileFit website origin and configure the correct OAuth client. The public OAuth client ID is not configured yet. The actual connection button remains disabled until that value is added and the Google consent setup is complete.</p>
-      ${formSection('Privacy and access','The integration is designed to use the narrow drive.file permission for app-created backup files, not broad access to every Drive file.')}
-      <p class="full-span">Backups will be encrypted in the browser before upload. The backup password will not be sent to Google or stored by FragileFit. A Drive access token must not be placed in a public source file or localStorage.</p>
-      ${formSection('What it will not do initially','The first version will upload and restore versioned backup files. It will not merge or live-sync edits between devices.')}
-      <p class="muted small full-span">No Google sign-in or permission request is started by opening this information screen.</p>
+      ${formSection('Current status',configurationMessage)}
+      <p class="full-span">Before the first connection, the app owner must enable the Google Drive API, configure the Google Auth Platform consent screen, add the FragileFit website origin https://baidyaprince69-web.github.io as an authorized JavaScript origin, and add the signing-in Google account as a test user while the app is in Testing. Reload FragileFit after completing these settings, then choose Connect Google Drive. The app stays disconnected until you explicitly authorize it.</p>
+      ${formSection('Privacy and access','The integration uses the narrow drive.file permission for files created or opened by this app, not unrestricted access to every Drive file.')}
+      <p class="full-span">Backups are encrypted in the browser before upload. The backup password is not sent to Google or stored by FragileFit. A Drive access token stays in memory for the current browser session and must not be placed in a public source file or browser storage.</p>
+      ${formSection('What this release does not do','This release uploads and restores versioned backup files manually. It does not merge records, schedule automatic backups or live-sync edits between devices.')}
+      <p class="muted small full-span">Opening this information screen does not start Google sign-in or request permission.</p>
     </div>`,
     async (_form, dialog) => { dialog.close(); },
     'Close'
