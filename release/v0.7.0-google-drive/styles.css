@@ -1,0 +1,16 @@
+/* v0.7.0 Google Drive backup controls */
+.drive-status-controls{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+.drive-backups-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 8px;padding-top:16px;border-top:1px solid #e8edf4}
+.drive-backups-heading strong{font-size:13px;color:#26364d}
+.drive-backups-heading span{font-size:11px;color:#758195}
+.drive-backup-list{display:grid;gap:9px}
+.drive-backup-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 14px;border:1px solid #e4eaf2;border-radius:12px;background:#fbfcfe}
+.drive-backup-row>div{min-width:0;display:grid;gap:4px}
+.drive-backup-row strong{font-size:13px;color:#26364d}
+.drive-backup-row small{font-size:11px;color:#758195;overflow-wrap:anywhere}
+.drive-backup-row .btn{flex:0 0 auto}
+@media(max-width:580px){
+ .drive-status-controls{display:grid;grid-template-columns:1fr}
+ .drive-backup-row{align-items:flex-start;flex-direction:column}
+ .drive-backup-row .btn{width:100%}
+}
