@@ -1,0 +1,15 @@
+{
+  "name": "fragilefit",
+  "version": "0.7.0",
+  "private": false,
+  "type": "module",
+  "description": "Offline-first packaging intelligence and profitability PWA for fragile-goods businesses.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node tests/run-tests.mjs"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "6.2.7",
+    "typescript": "^5.8.3"
+  }
+}
