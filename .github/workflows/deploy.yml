@@ -233,8 +233,8 @@ jobs:
             const file = 'site/' + name;
             let html = fs.readFileSync(file, 'utf8');
             if (!html.includes('analytics-consent.js')) {
-              if (!/<\\/head>/i.test(html)) throw new Error('Missing closing head tag in ' + name);
-              html = html.replace(/<\\/head>/i, '  <script defer src="./analytics-consent.js"></script>\n</head>');
+              if (!/<\/head>/i.test(html)) throw new Error('Missing closing head tag in ' + name);
+              html = html.replace(/<\/head>/i, '  <script defer src="./analytics-consent.js"></script>\n</head>');
               fs.writeFileSync(file, html);
             }
           }
