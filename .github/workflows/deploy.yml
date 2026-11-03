@@ -1,5 +1,5 @@
 name: Build and deploy FragileFit
-# Build FragileFit v0.3.0: tested base, v0.2.0 features, product polish, and Clear Blue theme.
+# Build FragileFit v0.3.1: v0.3.0 product release plus tested first-visit clarity improvements.
 
 on:
   push:
@@ -10,6 +10,7 @@ on:
       - "release/v0.2.0-patch-parts/**"
       - "release/v0.2.1-theme/**"
       - "release/v0.3.0-polish/**"
+      - "release/v0.3.1-visitor-clarity/part-*.b64"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -19,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages-v030
+  group: github-pages-v031
   cancel-in-progress: true
 
 jobs:
@@ -100,6 +101,14 @@ jobs:
           unzip -tq /tmp/FragileFit-v0.3.0-polish-patch.zip
           unzip -oq /tmp/FragileFit-v0.3.0-polish-patch.zip -d site
           echo "FragileFit v0.3.0 product and experience refresh applied." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Reconstruct and apply v0.3.1 visitor-clarity update
+        shell: bash
+        run: |
+          cat release/v0.3.1-visitor-clarity/part-{00..03}.b64 | base64 --decode > /tmp/FragileFit-v0.3.1-visitor-clarity.zip
+          unzip -tq /tmp/FragileFit-v0.3.1-visitor-clarity.zip
+          unzip -oq /tmp/FragileFit-v0.3.1-visitor-clarity.zip -d site
+          echo "FragileFit v0.3.1 visitor-clarity update applied." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Apply Clear Blue visual theme
         shell: bash
