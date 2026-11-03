@@ -17,6 +17,7 @@ on:
       - "release/v0.6.0-data-safety/**"
       - "release/v0.7.0-google-drive/**"
       - "release/v0.7.1-privacy-terms/**"
+      - "release/v0.7.2-analytics/**"
       - "patches/security.ts"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
@@ -214,6 +215,34 @@ jobs:
           cp release/v0.7.1-privacy-terms/terms.html site/terms.html
           cp release/v0.7.1-privacy-terms/tests/legal-pages-tests.mjs site/tests/legal-pages-tests.mjs
           echo "Updated privacy policy and terms for local storage and encrypted Google Drive backups." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apply optional GA4 consent and privacy-safe usage metrics
+        shell: bash
+        run: |
+          test -s release/v0.7.2-analytics/analytics-consent.js
+          test -s release/v0.7.2-analytics/privacy.html
+          test -s release/v0.7.2-analytics/tests/analytics-tests.mjs
+          cp release/v0.7.2-analytics/analytics-consent.js site/analytics-consent.js
+          cp release/v0.7.2-analytics/privacy.html site/privacy.html
+          node --check site/analytics-consent.js
+          node release/v0.7.2-analytics/tests/analytics-tests.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const htmlFiles = fs.readdirSync('site').filter(name => name.toLowerCase().endsWith('.html'));
+          for (const name of htmlFiles) {
+            const file = 'site/' + name;
+            let html = fs.readFileSync(file, 'utf8');
+            if (!html.includes('analytics-consent.js')) {
+              if (!/<\\/head>/i.test(html)) throw new Error('Missing closing head tag in ' + name);
+              html = html.replace(/<\\/head>/i, '  <script defer src="./analytics-consent.js"></script>\n</head>');
+              fs.writeFileSync(file, html);
+            }
+          }
+          NODE
+          grep -q "analytics-consent.js" site/index.html
+          grep -q "analytics-consent.js" site/app.html
+          sed -i 's/fragilefit-shell-v7-first-visit-data-warning/fragilefit-shell-v8-analytics-consent/g' site/sw.js
+          echo "FragileFit optional GA4 consent and privacy-safe event tracking installed." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         working-directory: site
