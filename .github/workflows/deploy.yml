@@ -168,7 +168,7 @@ jobs:
           cp release/v0.6.0-data-safety/src/drive.ts site/src/drive.ts
           cp release/v0.6.0-data-safety/package.json site/package.json
           cp release/v0.6.0-data-safety/tests/run-tests.mjs site/tests/run-tests.mjs
-          cp release/v0.6.0-data-safety/tests/data-safety-tests.mjs site/tests/data-safety-tests.mjs
+          cp release/v0.7.0-google-drive/tests/data-safety-tests.mjs site/tests/data-safety-tests.mjs
           cat release/v0.6.0-data-safety/styles.css >> site/styles.css
           sed -i 's/fragilefit-shell-v4-data-safety/fragilefit-shell-v5-safety-warnings/g' site/sw.js
           echo "FragileFit v0.6.0 data safety warnings, guarded delete flows and Drive preparation installed." >> "$GITHUB_STEP_SUMMARY"
@@ -183,6 +183,7 @@ jobs:
           test -s release/v0.7.0-google-drive/package.json
           test -s release/v0.7.0-google-drive/tests/run-tests.mjs
           test -s release/v0.7.0-google-drive/tests/drive-tests.mjs
+          test -s release/v0.7.0-google-drive/tests/data-safety-tests.mjs
           cp release/v0.7.0-google-drive/src/main.ts site/src/main.ts
           cp release/v0.7.0-google-drive/src/drive.ts site/src/drive.ts
           cp release/v0.7.0-google-drive/src/google-config.ts site/src/google-config.ts
