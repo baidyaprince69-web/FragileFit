@@ -115,7 +115,7 @@ jobs:
         run: |
           cat release/v0.2.1-theme/clear-blue.css >> site/styles.css
           sed -i 's/<meta name="theme-color" content="[^"]*"/<meta name="theme-color" content="#f4f8ff"/g' site/*.html
-          sed -i -E 's/("(theme_color|background_color)"[[:space:]]*:[[:space:]]*)"[^"]+"/\\1"#f4f8ff"/g' site/manifest.webmanifest
+          sed -i -E 's/("(theme_color|background_color)"[[:space:]]*:[[:space:]]*)"[^"]+"/\1"#f4f8ff"/g' site/manifest.webmanifest
           sed -i 's/fragilefit-shell-v2/fragilefit-shell-v3-blue/g' site/sw.js
           echo "Clear Blue light visual theme applied." >> "$GITHUB_STEP_SUMMARY"
 
