@@ -31,13 +31,12 @@ await test('Backup restore warns that it replaces rather than merges the workspa
   assert.match(mainSource, /Restoring replaces the current local workspace; it does not merge/);
   assert.match(mainSource, /confirmReplace/);
 });
-await test('Google Drive remains disconnected until explicit OAuth configuration exists', async () => {
+await test('Google Drive OAuth client is configured but remains disconnected until user authorization', async () => {
   const status = getGoogleDrivePreparationStatus();
-  assert.equal(status.configured, false);
+  assert.equal(status.configured, true);
   assert.equal(status.connected, false);
   assert.equal(GOOGLE_DRIVE_BACKUP_FOLDER_NAME, 'FragileFit Backups');
   assert.equal(GOOGLE_DRIVE_BACKUP_SCOPE, 'https://www.googleapis.com/auth/drive.file');
-  assert.match(mainSource, /Google OAuth client ID must be configured/);
   assert.match(mainSource, /No access token or client secret belongs in the repository/);
 });
 
