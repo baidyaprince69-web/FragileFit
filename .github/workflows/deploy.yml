@@ -117,7 +117,10 @@ jobs:
         run: |
           test -f release/v0.4.0-practice/practice.html
           test -f release/v0.4.0-practice/inject-practice-links.mjs
+          node --check release/v0.4.0-practice/inject-practice-links.mjs
           cp release/v0.4.0-practice/practice.html site/practice.html
+          node -e 'const fs=require("node:fs");const html=fs.readFileSync("site/practice.html","utf8");const match=html.match(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/i);if(!match)throw new Error("Practice page script is missing");fs.writeFileSync("/tmp/fragilefit-practice.js",match[1]);'
+          node --check /tmp/fragilefit-practice.js
           node release/v0.4.0-practice/inject-practice-links.mjs site
           test -s site/practice.html
           grep -q "Start guided practice" site/index.html
