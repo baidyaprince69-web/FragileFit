@@ -16,6 +16,7 @@ on:
       - "release/v0.5.0-data-safety/**"
       - "release/v0.6.0-data-safety/**"
       - "release/v0.7.0-google-drive/**"
+      - "patches/security.ts"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -194,6 +195,13 @@ jobs:
           cat release/v0.7.0-google-drive/styles.css >> site/styles.css
           sed -i 's/fragilefit-shell-v5-safety-warnings/fragilefit-shell-v6-google-drive/g' site/sw.js
           echo "FragileFit v0.7.0 encrypted Google Drive backup and restore installed." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apply eight-character encrypted backup password policy
+        shell: bash
+        run: |
+          test -s patches/security.ts
+          cp patches/security.ts site/src/security.ts
+          echo "Eight-character minimum applied to local and Google Drive encrypted backups." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         working-directory: site
